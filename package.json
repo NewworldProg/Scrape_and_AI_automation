@@ -1,0 +1,25 @@
+{
+    "name": "upwork-notifier",
+    "version": "1.0.0",
+    "description": "Upwork job notifier using browser connect strategy",
+    "main": "js_scrapers/browser_connect_puppeteer.js",
+    "scripts": {
+        "start": "node js_scrapers/browser_connect_puppeteer.js",
+        "scrape": "node js_scrapers/browser_connect_puppeteer.js"
+    },
+    "keywords": [
+        "upwork",
+        "scraper",
+        "notifier",
+        "jobs"
+    ],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "google-auth-library": "^10.4.2",
+        "google-spreadsheet": "^5.0.2",
+        "googleapis": "^164.1.0",
+        "jsdom": "^27.0.1",
+        "puppeteer-core": "^24.25.0"
+    }
+}
