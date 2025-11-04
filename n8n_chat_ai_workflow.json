@@ -135,14 +135,23 @@
       ]
     },
     {
-      "__comment": "======== node for generating GPT-2 AI responses ==============",
-      "works": "uses local GPT-2 model to generate response suggestions",
+      "__comment": "======== node for smart chat response with ML phase detection ==============",
+      "works": "ML-powered phase detection + 4 response modes (template/hybrid/pure/summary)",
+      "response_modes": {
+        "template": "Fast 5 pre-written options (default, ~0.1s)",
+        "hybrid": "Template + AI personalization (3 options, ~2s)",
+        "pure": "Fully AI-generated (3 options, ~3s)",
+        "summary": "Template + AI context summary (3 options, ~2s)",
+        "all": "ALL 4 modes sequentially (14 total options, ~7-8s)"
+      },
+      "current_mode": "all",
+      "how_to_change_mode": "Edit command parameter: change '-Mode all' to '-Mode template/hybrid/pure/summary' for single mode",
       "parameters": {
-        "command": "powershell -ExecutionPolicy Bypass -File \"E:\\Repoi\\UpworkNotif\\run_chat_ai_generator.ps1\" -SessionId \"latest\" -Type \"professional\"",
+        "command": "powershell -ExecutionPolicy Bypass -File \"E:\\Repoi\\UpworkNotif\\run_smart_chat_response.ps1\" -Mode all",
         "workingDirectory": "E:\\Repoi\\UpworkNotif"
       },
-      "id": "gpt2-ai-responses",
-      "name": "GPT-2 AI Responses",
+      "id": "smart-chat-response",
+      "name": "Smart Chat Response (All Modes)",
       "type": "n8n-nodes-base.executeCommand",
       "typeVersion": 1,
       "position": [
@@ -256,14 +265,14 @@
       "main": [
         [
           {
-            "node": "GPT-2 AI Responses",
+            "node": "Smart Chat Response (All Modes)",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "GPT-2 AI Responses": {
+    "Smart Chat Response (All Modes)": {
       "main": [
         [
           {
@@ -276,18 +285,31 @@
     }
   },
   "createdAt": "2025-10-31T00:00:00.000Z",
-  "updatedAt": "2025-10-31T00:00:00.000Z",
+  "updatedAt": "2025-11-03T21:10:00.000Z",
   "settings": {},
   "staticData": {},
   "meta": {
-    "templateCredsSetupCompleted": true
+    "templateCredsSetupCompleted": true,
+    "version": "3.0",
+    "features": [
+      "ML Phase Detection (BERT, 100% accuracy)",
+      "8 Conversation Phases",
+      "Knowledge Check Detection (92% confidence)",
+      "4 Response Modes (template/hybrid/pure/summary)",
+      "Template Mode: 5 fast options (default)",
+      "Hybrid Mode: AI-enhanced personalization",
+      "Pure Mode: Fully AI-generated",
+      "Summary Mode: Template + context summary"
+    ]
   },
   "pinData": {},
-  "versionId": "chat-working-v2",
+  "versionId": "chat-ml-v3",
   "triggerCount": 0,
   "tags": [
     "chat",
     "ai",
+    "ml-powered",
+    "phase-detection",
     "working"
   ]
 }

@@ -35,17 +35,36 @@ class ChatDashboardGenerator:
                 try:
                     with open(temp_ai_file, 'r', encoding='utf-8') as f:
                         temp_suggestions = json.load(f)
-                        # Create single suggestion object with all responses
-                        ai_suggestions = [{
-                            'session_id': temp_suggestions.get('session_id', 'unknown'),
-                            'suggestion_type': temp_suggestions.get('suggestion_type', 'unknown'),
-                            'confidence': temp_suggestions.get('confidence', 0.0),
-                            'generated_at': temp_suggestions.get('created_at', datetime.now().isoformat()),
-                            'responses': temp_suggestions.get('responses', []),
-                            'used': False
-                        }] if temp_suggestions.get('responses') else []
+                        
+                        # Check if it's multi-mode format (new)
+                        if 'all_modes' in temp_suggestions:
+                            # New format with all 4 modes
+                            print("[INFO] Loading multi-mode AI suggestions")
+                            ai_suggestions = [{
+                                'session_id': temp_suggestions.get('session_id', 'unknown'),
+                                'suggestion_type': 'all-modes',
+                                'confidence': temp_suggestions.get('confidence', 0.0),
+                                'generated_at': temp_suggestions.get('created_at', datetime.now().isoformat()),
+                                'all_modes': temp_suggestions.get('all_modes', {}),
+                                'phase': temp_suggestions.get('phase', 'Unknown'),
+                                'model_used': temp_suggestions.get('model_used', 'unknown'),
+                                'detection_method': temp_suggestions.get('detection_method', 'unknown'),
+                                'total_options': temp_suggestions.get('total_options', 0),
+                                'used': False
+                            }]
+                        else:
+                            # Old format with single mode
+                            print("[INFO] Loading single-mode AI suggestions")
+                            ai_suggestions = [{
+                                'session_id': temp_suggestions.get('session_id', 'unknown'),
+                                'suggestion_type': temp_suggestions.get('suggestion_type', 'unknown'),
+                                'confidence': temp_suggestions.get('confidence', 0.0),
+                                'generated_at': temp_suggestions.get('created_at', datetime.now().isoformat()),
+                                'responses': temp_suggestions.get('responses', []),
+                                'used': False
+                            }] if temp_suggestions.get('responses') else []
                 except Exception as e:
-                    print(f"Error loading temp AI suggestions: {e}")
+                    print(f"[ERROR] Error loading temp AI suggestions: {e}")
                     ai_suggestions = []
             
             # Replace recent_responses with temp AI suggestions
@@ -566,26 +585,127 @@ class ChatDashboardGenerator:
         for suggestion in suggestions[-5:]:  # Last 5 suggestions
             time_ago = self.time_ago(suggestion['generated_at'])
             
-            responses_html = ""
-            for i, response in enumerate(suggestion['responses'][:3], 1):
-                responses_html += f"""
-                <div class="response-option" onclick="copyResponse('{response.replace("'", "\\'")}')">
-                    <strong>Option {i}:</strong> {response}
+            # Check if this is multi-mode format
+            if 'all_modes' in suggestion:
+                # Multi-mode format - show all 4 modes
+                all_modes = suggestion['all_modes']
+                phase = suggestion.get('phase', 'Unknown Phase')
+                detection_method = suggestion.get('detection_method', 'unknown')
+                
+                responses_html = f"""
+                <div style="margin-bottom: 15px; padding: 10px; background: #e3f2fd; border-radius: 8px;">
+                    <strong>📊 Detected Phase:</strong> {phase} 
+                    <span style="color: #666; font-size: 0.9em;">({detection_method})</span><br>
+                    <strong>🎯 Total Options:</strong> {suggestion.get('total_options', 0)} responses across 4 modes
                 </div>
                 """
-            
-            suggestions_html += f"""
-            <div class="ai-suggestion">
-                <div class="suggestion-header">
-                    <strong>Type: {suggestion['suggestion_type'].title()}</strong>
-                    <div class="confidence-badge">{suggestion['confidence']:.1f}</div>
+                
+                # Template mode
+                if 'template' in all_modes:
+                    mode = all_modes['template']
+                    responses_html += f"""
+                    <div style="margin: 15px 0; padding: 15px; background: #f1f8e9; border-left: 4px solid #8bc34a; border-radius: 8px;">
+                        <strong>✅ {mode['mode_name']}</strong> 
+                        <span style="color: #666;">({mode['speed']})</span><br>
+                        <em style="color: #666; font-size: 0.9em;">{mode['description']}</em>
+                        <div style="margin-top: 10px;">
+                    """
+                    for i, response in enumerate(mode['responses'][:3], 1):
+                        responses_html += f"""
+                        <div class="response-option" onclick="copyResponse('{response.replace("'", "\\'")}')">
+                            <strong>Option {i}:</strong> {response}
+                        </div>
+                        """
+                    responses_html += "</div></div>"
+                
+                # Hybrid mode
+                if 'hybrid' in all_modes:
+                    mode = all_modes['hybrid']
+                    responses_html += f"""
+                    <div style="margin: 15px 0; padding: 15px; background: #fff3e0; border-left: 4px solid #ff9800; border-radius: 8px;">
+                        <strong>🔗 {mode['mode_name']}</strong> 
+                        <span style="color: #666;">({mode['speed']})</span><br>
+                        <em style="color: #666; font-size: 0.9em;">{mode['description']}</em>
+                        <div style="margin-top: 10px;">
+                    """
+                    for i, response in enumerate(mode['responses'][:1], 1):
+                        responses_html += f"""
+                        <div class="response-option" onclick="copyResponse('{response.replace("'", "\\'")}')">
+                            <strong>Option {i}:</strong> {response}
+                        </div>
+                        """
+                    responses_html += "</div></div>"
+                
+                # Pure AI mode
+                if 'pure' in all_modes:
+                    mode = all_modes['pure']
+                    responses_html += f"""
+                    <div style="margin: 15px 0; padding: 15px; background: #f3e5f5; border-left: 4px solid #9c27b0; border-radius: 8px;">
+                        <strong>🤖 {mode['mode_name']}</strong> 
+                        <span style="color: #666;">({mode['speed']})</span><br>
+                        <em style="color: #666; font-size: 0.9em;">{mode['description']}</em>
+                        <div style="margin-top: 10px;">
+                    """
+                    for i, response in enumerate(mode['responses'][:1], 1):
+                        responses_html += f"""
+                        <div class="response-option" onclick="copyResponse('{response.replace("'", "\\'")}')">
+                            <strong>Option {i}:</strong> {response}
+                        </div>
+                        """
+                    responses_html += "</div></div>"
+                
+                # Summary mode
+                if 'summary' in all_modes:
+                    mode = all_modes['summary']
+                    responses_html += f"""
+                    <div style="margin: 15px 0; padding: 15px; background: #e1f5fe; border-left: 4px solid #03a9f4; border-radius: 8px;">
+                        <strong>📝 {mode['mode_name']}</strong> 
+                        <span style="color: #666;">({mode['speed']})</span><br>
+                        <em style="color: #666; font-size: 0.9em;">{mode['description']}</em>
+                        <div style="margin-top: 10px;">
+                    """
+                    for i, response in enumerate(mode['responses'][:1], 1):
+                        responses_html += f"""
+                        <div class="response-option" onclick="copyResponse('{response.replace("'", "\\'")}')">
+                            <strong>Option {i}:</strong> {response}
+                        </div>
+                        """
+                    responses_html += "</div></div>"
+                
+                suggestions_html += f"""
+                <div class="ai-suggestion">
+                    <div class="suggestion-header">
+                        <strong>All Response Modes</strong>
+                        <div class="confidence-badge">{suggestion['confidence']:.1%}</div>
+                    </div>
+                    <div class="timestamp">{time_ago}</div>
+                    <div class="response-options">
+                        {responses_html}
+                    </div>
                 </div>
-                <div class="timestamp">{time_ago}</div>
-                <div class="response-options">
-                    {responses_html}
+                """
+            else:
+                # Old single-mode format
+                responses_html = ""
+                for i, response in enumerate(suggestion.get('responses', [])[:3], 1):
+                    responses_html += f"""
+                    <div class="response-option" onclick="copyResponse('{response.replace("'", "\\'")}')">
+                        <strong>Option {i}:</strong> {response}
+                    </div>
+                    """
+                
+                suggestions_html += f"""
+                <div class="ai-suggestion">
+                    <div class="suggestion-header">
+                        <strong>Type: {suggestion['suggestion_type'].title()}</strong>
+                        <div class="confidence-badge">{suggestion['confidence']:.1f}</div>
+                    </div>
+                    <div class="timestamp">{time_ago}</div>
+                    <div class="response-options">
+                        {responses_html}
+                    </div>
                 </div>
-            </div>
-            """
+                """
         
         return suggestions_html
     

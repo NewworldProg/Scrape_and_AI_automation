@@ -1,13 +1,55 @@
 {
   "session_id": "latest",
-  "suggestion_type": "professional",
-  "context": "Contact: When I get my coffee I'm down for any challenges haha\nContact: Thank you for your trust!I\u2019ll make sure to put in my best effort to complete the tasks correctly. I\u2019m excited to get started and I look forward to many more collaborations in the future.\nContact: Cool\nContact: Also\nContact: Will send instructions latwr\nContact: I send you instructions\nContact: For doc purposes\nContact: As my team is there\nContact: got it\nContact: To your tool you built ok",
-  "responses": [
-    "Thanks for all your help\nPosted by: The_Buddhist_Monkey on Monday, January 25th, 2013 at 12:54:45 PM\nJust got back from the trip.",
-    "If you are not already familiar with the basics of the project you will need to do a bit of research on this project and you should probably get a good feel for how it works and what you can expect...",
-    "Thank you again! Thank You\ncontact: for support\nI want to thank everyone for their support and feedback."
-  ],
-  "model_used": "gpt2",
-  "confidence": 0.9,
-  "created_at": "2025-10-31T06:20:53.045271"
+  "suggestion_type": "all-modes-combined",
+  "phase": "Contract & Start",
+  "next_phase": null,
+  "all_modes": {
+    "template": {
+      "mode_name": "Template Only (Fast)",
+      "description": "Pre-written professional templates",
+      "num_options": 3,
+      "responses": [
+        "Contract accepted! I'll start working on this immediately and keep you updated.",
+        "Thank you! I've accepted the offer. I'll deliver high-quality work by the deadline.",
+        "Great! Starting now. You can expect the first deliverable by [deadline]."
+      ],
+      "speed": "~0.1s",
+      "recommended": "Contract accepted! I'll start working on this immediately and keep you updated."
+    },
+    "hybrid": {
+      "mode_name": "Hybrid (Template + AI)",
+      "description": "Template base with AI personalization",
+      "num_options": 1,
+      "responses": [
+        "Thank you for your interest in this topic."
+      ],
+      "speed": "~2s",
+      "recommended": "Thank you for your interest in this topic."
+    },
+    "pure": {
+      "mode_name": "Pure AI Generation",
+      "description": "Fully AI-generated from context",
+      "num_options": 1,
+      "responses": [
+        "Https://twitter."
+      ],
+      "speed": "~3s",
+      "recommended": "Https://twitter."
+    },
+    "summary": {
+      "mode_name": "Template + AI Summary",
+      "description": "Template with AI context summary",
+      "num_options": 1,
+      "responses": [
+        "Contract accepted! I'll start working on this immediately and keep you updated.\n\n📝 Context: I hope to have more information about the project by the end of the month."
+      ],
+      "speed": "~2s",
+      "recommended": "Contract accepted! I'll start working on this immediately and keep you updated.\n\n📝 Context: I hope to have more information about the project by the end of the month."
+    }
+  },
+  "total_options": 6,
+  "created_at": "2025-11-04T07:29:59.483647",
+  "model_used": "smart-phase-detector",
+  "confidence": 0.38,
+  "detection_method": "ml_model"
 }
