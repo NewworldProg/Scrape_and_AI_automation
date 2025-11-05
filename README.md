@@ -9,7 +9,16 @@
 
 ---
 
-## 📋 Sadržaj
+## � Quick Start
+
+**New user? Start here:**
+- 📖 **[Quick Start Guide (5 minutes)](QUICKSTART.md)** - Download ZIP → Setup → Run
+- 📚 **[Full Installation Guide](INSTALLATION_GUIDE.md)** - Detailed setup with troubleshooting
+- ⚖️ **[Legal Disclaimer](#-legal-disclaimer)** - Important legal information
+
+---
+
+## �📋 Sadržaj
 
 - [Šta sistem radi](#-šta-sistem-radi)
 - [Instalacija](#-instalacija)
@@ -22,6 +31,7 @@
 - [Konfiguracija](#%EF%B8%8F-konfiguracija)
 - [Troubleshooting](#-troubleshooting)
 - [Struktura Projekta](#-struktura-projekta)
+- [Legal Disclaimer](#-legal-disclaimer)
 
 ---
 
