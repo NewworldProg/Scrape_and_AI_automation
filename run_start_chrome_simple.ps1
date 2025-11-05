@@ -1,15 +1,23 @@
-# Chrome Debug Starter
-# log that script is starting
-Write-Host "Starting Chrome..."
-# inside variable define path to chrome
-$chrome = "C:\Program Files\Google\Chrome\Application\chrome.exe"
-# if chrome path exists start chrome with remote debugging port and user data dir
-# make new profile folder with all data
-# log if chrome started or not found
-if (Test-Path $chrome) {
-    Start-Process $chrome "--remote-debugging-port=9222 --user-data-dir=E:\Repoi\UpworkNotif\chrome_profile"
-    Write-Host "Chrome started"
+# Chrome Debug Starter - Portable version using $PSScriptRoot
+$projectRoot = $PSScriptRoot
+Write-Host "Starting Chrome from: $projectRoot"
+
+# Try common Chrome installation paths
+$chromePaths = @(
+    "C:\Program Files\Google\Chrome\Application\chrome.exe",
+    "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
+    "$env:LOCALAPPDATA\Google\Chrome\Application\chrome.exe"
+)
+
+$chrome = $chromePaths | Where-Object { Test-Path $_ } | Select-Object -First 1
+
+if ($chrome) {
+    $profilePath = Join-Path $projectRoot "chrome_profile"
+    Start-Process $chrome "--remote-debugging-port=9222 --user-data-dir=`"$profilePath`""
+    Write-Host "Chrome started with profile: $profilePath"
 }
 else {
-    Write-Host "Chrome not found"
+    Write-Host "ERROR: Chrome not found in standard locations!"
+    Write-Host "Please install Chrome or update the script with your Chrome path."
+    exit 1
 }

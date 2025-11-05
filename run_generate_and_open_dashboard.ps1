@@ -1,3 +1,4 @@
+$projectRoot = $PSScriptRoot
 # PowerShell script to generate HTML dashboard and open it
 # For use with n8n Execute Command node
 
@@ -6,7 +7,7 @@ try {
     Write-Host "💼 Generating and opening job opportunities dashboard..."
     
     # Change to project directory
-    Set-Location "E:\Repoi\UpworkNotif"
+    Set-Location $projectRoot
     
     # Generate timestamp for unique filename
     $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"

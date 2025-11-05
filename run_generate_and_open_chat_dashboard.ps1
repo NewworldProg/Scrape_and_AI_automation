@@ -1,8 +1,9 @@
+$projectRoot = $PSScriptRoot
 # Chat Dashboard Generator and Browser Opener for n8n
 $OutputEncoding = [System.Text.Encoding]::UTF8
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
-Set-Location "E:\Repoi\UpworkNotif"
+Set-Location $projectRoot
 Write-Host "Starting Chat Dashboard Generator and Browser Opener..."
 
 try {
@@ -23,7 +24,7 @@ try {
     Write-Host "Chat dashboard generated successfully"
     
     # Check if dashboard file exists
-    $dashboardPath = "E:\Repoi\UpworkNotif\chat_dashboard.html"
+    $dashboardPath = "$projectRoot\chat_dashboard.html"
     if (-not (Test-Path $dashboardPath)) {
         Write-Host "Dashboard file not found at: $dashboardPath"
         exit 1

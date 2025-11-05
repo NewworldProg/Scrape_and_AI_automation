@@ -1,5 +1,6 @@
+$projectRoot = $PSScriptRoot
 # Direct Node.js Scraper for n8n - runs js_scrapers/browser_connect_puppeteer.js
-Set-Location "E:\Repoi\UpworkNotif"
+Set-Location $projectRoot
 # log that script is starting
 Write-Host "Starting Node.js scraper directly..."
 

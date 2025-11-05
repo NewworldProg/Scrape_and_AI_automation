@@ -1,5 +1,6 @@
+$projectRoot = $PSScriptRoot
 # Chat JavaScript Scraper for n8n
-Set-Location "E:\Repoi\UpworkNotif"
+Set-Location $projectRoot
 Write-Host "Starting Chat JavaScript Scraper..."
 
 try {

@@ -1,10 +1,12 @@
-# Cleanup Script - Delete unnecessary files
+# Cleanup Script - Delete unnecessary files (Portable version)
 
-$projectRoot = "E:\Repoi\UpworkNotif"
-cd $projectRoot
+$projectRoot = $PSScriptRoot
+Set-Location $projectRoot
 
+Write-Host "Project root: $projectRoot" -ForegroundColor Cyan
 Write-Host "Creating backup..." -ForegroundColor Yellow
-$backupFolder = "E:\Repoi\UpworkNotif_BACKUP_$(Get-Date -Format 'yyyyMMdd_HHmmss')"
+
+$backupFolder = Join-Path (Split-Path $projectRoot -Parent) "UpworkNotif_BACKUP_$(Get-Date -Format 'yyyyMMdd_HHmmss')"
 Copy-Item -Path $projectRoot -Destination $backupFolder -Recurse
 Write-Host "Backup created at: $backupFolder" -ForegroundColor Green
 Write-Host ""

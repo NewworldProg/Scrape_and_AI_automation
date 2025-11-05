@@ -1,8 +1,9 @@
+$projectRoot = $PSScriptRoot
 # Chrome Chat Status Check - Identical to working version
 # Checks if Chrome is running with debug port 9223 for chat
 
 try {
-    Set-Location "E:\Repoi\UpworkNotif"
+    Set-Location $projectRoot
     
     # Set UTF-8 encoding
     $OutputEncoding = [System.Text.Encoding]::UTF8

@@ -1,8 +1,11 @@
-# Simple Chrome Chat Starter - Identical to working version
+# Simple Chrome Chat Starter - Portable version using $PSScriptRoot
 # Starts Chrome with debug port 9223 for chat
 
 try {
-    Set-Location "E:\Repoi\UpworkNotif"
+    $projectRoot = $PSScriptRoot
+    Set-Location $projectRoot
+    
+    Write-Host "Starting Chrome Chat from: $projectRoot"
     
     # Set UTF-8 encoding
     $OutputEncoding = [System.Text.Encoding]::UTF8
@@ -24,12 +27,13 @@ try {
     }
     
     if (-not $chromePath) {
-        Write-Host "Chrome executable not found"
+        Write-Host "ERROR: Chrome executable not found in standard locations!"
+        Write-Host "Please install Chrome or update the script with your Chrome path."
         exit 1
     }
     
-    # Create chat profile directory
-    $chatProfilePath = "E:\Repoi\UpworkNotif\chrome_profile_chat"
+    # Create chat profile directory (relative to project root)
+    $chatProfilePath = Join-Path $projectRoot "chrome_profile_chat"
     if (-not (Test-Path $chatProfilePath)) {
         New-Item -ItemType Directory -Path $chatProfilePath -Force | Out-Null
     }
@@ -47,6 +51,7 @@ try {
     )
     
     Write-Host "Starting Chrome for chat on port 9223..."
+    Write-Host "Profile path: $chatProfilePath"
     
     Start-Process -FilePath $chromePath -ArgumentList $chromeArgs -WindowStyle Normal
     

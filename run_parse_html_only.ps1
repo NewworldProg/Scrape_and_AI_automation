@@ -1,8 +1,9 @@
+$projectRoot = $PSScriptRoot
 # PowerShell script to parse HTML from database for n8n workflow
 # Activates venv and runs Python script
 
 # Set working directory
-Set-Location "E:\Repoi\UpworkNotif"
+Set-Location $projectRoot
 
 # Activate virtual environment
 & ".\venv\Scripts\Activate.ps1"

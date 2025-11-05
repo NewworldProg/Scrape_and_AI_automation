@@ -1,4 +1,4 @@
-# 🗑️ Upwork Automation - Cleanup Script
+# 🗑️ Upwork Automation - Cleanup Script (Portable version)
 # Briše sve nepotrebne fajlove i konsoliduje dokumentaciju
 
 Write-Host "═══════════════════════════════════════════════════════" -ForegroundColor Cyan
@@ -6,15 +6,17 @@ Write-Host "   🗑️  UPWORK AUTOMATION CLEANUP SCRIPT" -ForegroundColor Yello
 Write-Host "═══════════════════════════════════════════════════════" -ForegroundColor Cyan
 Write-Host ""
 
-# Project root path
-$projectRoot = "E:\Repoi\UpworkNotif"
-cd $projectRoot
+# Project root path (portable)
+$projectRoot = $PSScriptRoot
+Set-Location $projectRoot
+Write-Host "📂 Project root: $projectRoot" -ForegroundColor Cyan
+Write-Host ""
 
 # ═══════════════════════════════════════════════════════
 # ⚠️  BACKUP FIRST
 # ═══════════════════════════════════════════════════════
 Write-Host "📦 Creating backup..." -ForegroundColor Yellow
-$backupFolder = "E:\Repoi\UpworkNotif_BACKUP_$(Get-Date -Format 'yyyyMMdd_HHmmss')"
+$backupFolder = Join-Path (Split-Path $projectRoot -Parent) "UpworkNotif_BACKUP_$(Get-Date -Format 'yyyyMMdd_HHmmss')"
 try {
     Copy-Item -Path $projectRoot -Destination $backupFolder -Recurse -ErrorAction Stop
     Write-Host "✅ Backup created at: $backupFolder" -ForegroundColor Green
@@ -23,6 +25,7 @@ catch {
     Write-Host "❌ Backup failed! Aborting cleanup." -ForegroundColor Red
     exit 1
 }
+Write-Host ""
 
 Write-Host ""
 

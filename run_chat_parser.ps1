@@ -1,8 +1,9 @@
+$projectRoot = $PSScriptRoot
 # Chat Parser for n8n
 $OutputEncoding = [System.Text.Encoding]::UTF8
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
-Set-Location "E:\Repoi\UpworkNotif"
+Set-Location $projectRoot
 Write-Host "Starting Chat Parser..."
 
 try {
