@@ -19,7 +19,11 @@ from data.chat_database_manager import ChatDatabase
 
 class ChatDashboardGenerator:
     def __init__(self):
-        self.db = ChatDatabase()
+        # Use same database path as AI system
+        import os
+        project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        db_path = os.path.join(project_root, "data", "chat_data.db")
+        self.db = ChatDatabase(db_path)
     
     def generate_dashboard(self, session_id=None):
         """Generate interactive dashboard HTML"""
@@ -50,6 +54,20 @@ class ChatDashboardGenerator:
                                 'model_used': temp_suggestions.get('model_used', 'unknown'),
                                 'detection_method': temp_suggestions.get('detection_method', 'unknown'),
                                 'total_options': temp_suggestions.get('total_options', 0),
+                                'used': False
+                            }]
+                        elif 'template_response' in temp_suggestions and 'ai_response' in temp_suggestions:
+                            # New "both" format with template and AI responses
+                            print("[INFO] Loading 'both' mode AI suggestions (Template + AI)")
+                            ai_suggestions = [{
+                                'session_id': temp_suggestions.get('session_id', 'unknown'),
+                                'suggestion_type': 'both',
+                                'confidence': temp_suggestions.get('confidence', 0.0),
+                                'generated_at': temp_suggestions.get('created_at', datetime.now().isoformat()),
+                                'template_response': temp_suggestions.get('template_response', ''),
+                                'ai_response': temp_suggestions.get('ai_response', ''),
+                                'phase': temp_suggestions.get('phase', 'Unknown'),
+                                'model_used': temp_suggestions.get('model_used', 'unknown'),
                                 'used': False
                             }]
                         else:
@@ -676,6 +694,61 @@ class ChatDashboardGenerator:
                 <div class="ai-suggestion">
                     <div class="suggestion-header">
                         <strong>All Response Modes</strong>
+                        <div class="confidence-badge">{suggestion['confidence']:.1%}</div>
+                    </div>
+                    <div class="timestamp">{time_ago}</div>
+                    <div class="response-options">
+                        {responses_html}
+                    </div>
+                </div>
+                """
+            elif suggestion['suggestion_type'] == 'both':
+                # New "both" format with template and AI responses
+                phase = suggestion.get('phase', 'Unknown Phase')
+                model_used = suggestion.get('model_used', 'unknown')
+                
+                responses_html = f"""
+                <div style="margin-bottom: 15px; padding: 10px; background: #e3f2fd; border-radius: 8px;">
+                    <strong>📊 Detected Phase:</strong> {phase} 
+                    <span style="color: #666; font-size: 0.9em;">({model_used})</span><br>
+                    <strong>🎯 Response Modes:</strong> Template + AI Comparison
+                </div>
+                """
+                
+                # Template response
+                template_response = suggestion.get('template_response', '')
+                if template_response:
+                    responses_html += f"""
+                    <div style="margin: 15px 0; padding: 15px; background: #f1f8e9; border-left: 4px solid #8bc34a; border-radius: 8px;">
+                        <strong>✅ Template Response</strong> 
+                        <span style="color: #666;">(Pre-written Professional)</span><br>
+                        <div style="margin-top: 10px;">
+                            <div class="response-option" onclick="copyResponse('{template_response.replace("'", "\\'")}')">
+                                <strong>Template:</strong> {template_response}
+                            </div>
+                        </div>
+                    </div>
+                    """
+                
+                # AI response
+                ai_response = suggestion.get('ai_response', '')
+                if ai_response:
+                    responses_html += f"""
+                    <div style="margin: 15px 0; padding: 15px; background: #f3e5f5; border-left: 4px solid #9c27b0; border-radius: 8px;">
+                        <strong>🤖 AI Response</strong> 
+                        <span style="color: #666;">(GPT-2 Generated)</span><br>
+                        <div style="margin-top: 10px;">
+                            <div class="response-option" onclick="copyResponse('{ai_response.replace("'", "\\'")}')">
+                                <strong>AI:</strong> {ai_response}
+                            </div>
+                        </div>
+                    </div>
+                    """
+                
+                suggestions_html += f"""
+                <div class="ai-suggestion">
+                    <div class="suggestion-header">
+                        <strong>Template + AI Responses</strong>
                         <div class="confidence-badge">{suggestion['confidence']:.1%}</div>
                     </div>
                     <div class="timestamp">{time_ago}</div>

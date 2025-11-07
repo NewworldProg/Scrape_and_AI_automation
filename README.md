@@ -5,16 +5,43 @@
 ![Python](https://img.shields.io/badge/python-3.8+-blue.svg)
 ![Node.js](https://img.shields.io/badge/node.js-16+-green.svg)
 ![n8n](https://img.shields.io/badge/n8n-workflow-orange.svg)
+![BERT](https://img.shields.io/badge/ML-BERT-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
 ---
 
-## � Quick Start
+## 🚀 Quick Start
 
 **New user? Start here:**
 - 📖 **[Quick Start Guide (5 minutes)](QUICKSTART.md)** - Download ZIP → Setup → Run
 - 📚 **[Full Installation Guide](INSTALLATION_GUIDE.md)** - Detailed setup with troubleshooting
+- 🔧 **[Universal Installation](#-universal-installation)** - Download from GitHub to any machine
 - ⚖️ **[Legal Disclaimer](#-legal-disclaimer)** - Important legal information
+
+---
+
+## ⚡ Universal Installation
+
+**New Architecture (v4.0)**: Works on any Windows machine after GitHub download!
+
+```powershell
+# 1. Download from GitHub
+git clone https://github.com/NewworldProg/WorkFlow.git
+cd WorkFlow
+
+# 2. Auto-detect project root and configure all workflows
+.\detect_project_root.ps1
+
+# 3. Load environment
+. .\environment.ps1
+
+# 4. Test environment
+Test-UpworkEnvironment
+
+# 5. Import updated workflows into n8n
+```
+
+The system now **automatically detects** your project location and **updates all 3 n8n workflows** with correct paths!
 
 ---
 
@@ -40,15 +67,17 @@
 The system automates **all aspects of Upwork freelancing**:
 
 ### 🤖 **1. Chat AI Assistant**
-- **Real-time chat monitoring** sa ML-powered phase detection
+- **Real-time chat monitoring** with optimized BERT architecture
 - **8 conversation phases** (Initial Response → Contract & Start)
-- **BERT ML model** for phase detection (100% accuracy, 92.6% za knowledge check)
+- **BERT ML model** for phase detection (100% accuracy, 8 phases)
+- **Optimized Architecture**: Single BERT call + database storage (2x faster)
 - **4 response generation modes**:
   - **Template Mode**: 3 quick options (~0.1s)
   - **Hybrid Mode**: AI-enhanced personalization (1 option, ~2s)
   - **Pure AI Mode**: Fully AI-generated (1 option, ~3s)  
   - **Summary Mode**: Template + AI context summary (1 option, ~2s)
-- **Interactive dashboard** sa click-to-copy response optionma
+- **Interactive dashboard** with click-to-copy response options
+- **Database-driven responses**: Phase detection updates database, responses read from database
 
 ### 📝 **2. Cover Letter Generator**
 - **Automatic generation** every 5 minutes
@@ -152,30 +181,42 @@ Run Chat Scraper (js_scrapers/browser_connect_chat.js)
   ↓
 Parse Chat Messages (scripts/chat_parser.py)
   ↓
-Smart Chat Response - ML Phase Detection
-  ├─ Detect Phase (ai/hybrid_phase_detector.py)
-  ├─ Template Mode (3 options)
-  ├─ Hybrid Mode (1 option)
-  ├─ Pure AI Mode (1 option)
-  └─ Summary Mode (1 option)
+🆕 STEP 1: BERT AI Phase Detection (Standalone)
+  └─ Detect Phase (ai/standalone_phase_detector.py)
+      └─ Updates database with phase & confidence
+  ↓
+🆕 STEP 2: Response Generation (Database-driven)
+  └─ Generate Response (ai/smart_chat_response.py)
+      ├─ Reads phase from database (no BERT call)
+      ├─ Template Mode (3 options)
+      ├─ Hybrid Mode (1 option)
+      ├─ Pure AI Mode (1 option)
+      └─ Summary Mode (1 option)
   ↓
 Generate & Open Dashboard (scripts/chat_dashboard_generator.py)
 ```
+
+**🚀 New Optimized Architecture (v4.0):**
+- **Single BERT Call**: Phase detection happens once in standalone script
+- **Database Storage**: Phases stored in `chat_sessions` table with confidence scores
+- **Faster Responses**: Response generation reads phase from database (no ML overhead)
+- **2x Performance**: Eliminated duplicate BERT model loading
 
 #### **PowerShell Scripts Used:**
 - `run_check_chrome_chat.ps1` - Check Chrome status (port 9223)
 - `run_start_chrome_chat_simple.ps1` - Start Chrome chat profile
 - `run_chat_scraper.ps1` - Scrape chat messages
 - `run_chat_parser.ps1` - Parse HTML to database
-- `run_smart_chat_response.ps1 -Mode all` - Generate AI responses (all 4 modes)
+- `run_detect_phase_standalone.ps1` - 🆕 BERT phase detection only
+- `run_generate_response.ps1 -Mode all` - 🆕 Generate responses from database
 - `run_generate_and_open_chat_dashboard.ps1` - Create interactive dashboard
 
 #### **Python Scripts Called:**
 - `js_scrapers/browser_connect_chat.js` - Puppeteer chat scraper
 - `scripts/chat_parser.py` - HTML parsing to SQLite
-- `data/chat_database_manager.py` - Database operations
-- `ai/smart_chat_response.py` - Main AI response generator
-- `ai/hybrid_phase_detector.py` - ML + keyword phase detector
+- `data/chat_database_manager.py` - Database operations with phase columns
+- `ai/standalone_phase_detector.py` - 🆕 Standalone BERT phase detection
+- `ai/smart_chat_response.py` - 🆕 Database-driven response generator (no BERT)
 - `ai/phase_detector.py` - BERT model inference
 - `ai/chat_gpt2_generator.py` - GPT-2 response generation
 - `scripts/chat_dashboard_generator.py` - Dashboard HTML generator
@@ -183,6 +224,7 @@ Generate & Open Dashboard (scripts/chat_dashboard_generator.py)
 #### **Database:**
 - **Location:** `data/chat_data.db`
 - **Tables:** `chat_sessions`, `chat_messages`
+- **🆕 New Columns:** `phase`, `phase_confidence`, `phase_updated_at`
 
 #### **Models:**
 - **Phase Classifier:** `ai/trained_models/phase_classifier_v1/` (BERT-base-uncased)
@@ -760,18 +802,18 @@ response_text = result['responses'][0]
 UpworkNotif/
 ├── 📁 ai/                                    # AI Components
 │   ├── __init__.py
+│   ├── standalone_phase_detector.py          # 🆕 Standalone BERT phase detection
+│   ├── smart_chat_response.py                # 🆕 Database-driven response generator
+│   ├── phase_detector.py                     # BERT phase classifier
 │   ├── chat_gpt2_generator.py                # GPT-2 response generator
 │   ├── cover_letter_generator.py             # Cover letter AI
-│   ├── phase_detector.py                     # BERT phase classifier
-│   ├── hybrid_phase_detector.py              # ML + keyword fallback
-│   ├── smart_chat_response.py                # Main response generator (4 modes)
 │   ├── train_phase_classifier.py             # BERT training script
 │   ├── phase_training_data.json              # 53 labeled conversations
 │   └── 📁 trained_models/
 │       └── 📁 phase_classifier_v1/           # BERT model (110M params)
 │
 ├── 📁 data/                                  # Database Components
-│   ├── chat_database_manager.py              # Chat DB operations
+│   ├── chat_database_manager.py              # 🆕 Enhanced with phase storage
 │   ├── database_manager.py                   # Job DB operations
 │   └── chat_data.db                          # SQLite chat database
 │
@@ -791,22 +833,27 @@ UpworkNotif/
 │
 ├── 📁 chrome_profile/                        # Chrome Debug Profile (port 9222)
 ├── 📁 chrome_profile_chat/                   # Chrome Chat Profile (port 9223)
+├── 📁 backup_n8n_original/                   # 🆕 Auto-generated workflow backups
 │
-├── 📄 n8n_chat_ai_workflow.json              # Chat AI Workflow (10 nodes)
+├── 📄 n8n_chat_ai_workflow.json              # 🆕 Updated Chat AI Workflow
 ├── 📄 n8n_ai_cover_letter_workflow.json      # Cover Letter Workflow (5 nodes)
 ├── 📄 n8n_workflow_conditional.json          # Job Scraper Workflow (11 nodes)
+│
+├── 📄 detect_project_root.ps1                # 🆕 Universal installation script
+├── 📄 environment.ps1                        # 🆕 Auto-generated environment config
 │
 ├── 📄 upwork_data.db                         # Jobs database
 ├── 📄 chat_dashboard.html                    # Generated chat dashboard
 ├── 📄 dashboard.html                         # Generated job dashboard
 │
+├── 🔧 run_detect_phase_standalone.ps1        # 🆕 Standalone BERT detection
+├── 🔧 run_generate_response.ps1              # 🆕 Database-driven responses
 ├── 🔧 run_check_chrome_chat.ps1              # Check chat Chrome status
 ├── 🔧 run_check_chrome_n8n.ps1               # Check job Chrome status
 ├── 🔧 run_start_chrome_chat_simple.ps1       # Start chat Chrome
 ├── 🔧 run_start_chrome_simple.ps1            # Start job Chrome
 ├── 🔧 run_chat_scraper.ps1                   # Run chat scraper
 ├── 🔧 run_chat_parser.ps1                    # Parse chat HTML
-├── 🔧 run_smart_chat_response.ps1            # Generate AI responses
 ├── 🔧 run_generate_and_open_chat_dashboard.ps1  # Chat dashboard
 ├── 🔧 run_js_scraper.ps1                     # Run job scraper
 ├── 🔧 run_save_html_to_db.ps1                # Save HTML to DB
@@ -1017,6 +1064,13 @@ chrome.exe --remote-debugging-port=9223 --user-data-dir="chrome_profile_chat"
 ---
 
 **Author:** AI Automation System  
-**Version:** 3.0  
-**Last Updated:** 2025-11-03  
+**Version:** 4.0 (Optimized Architecture)  
+**Last Updated:** 2025-11-07  
 **Repository:** https://github.com/NewworldProg/WorkFlow
+
+**🆕 New in v4.0:**
+- ⚡ **2x Performance**: Optimized BERT architecture (single call + database storage)
+- 🔧 **Universal Installation**: Automatic project root detection and workflow path updating
+- 📊 **Enhanced Database**: Phase storage with confidence scores and timestamps
+- 🎯 **Separated Concerns**: Standalone phase detection + database-driven responses
+- 📁 **Auto-backup**: Workflow backups created automatically during updates

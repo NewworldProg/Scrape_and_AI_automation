@@ -31,6 +31,9 @@ class ChatDatabase:
                 last_activity DATETIME,
                 total_messages INTEGER DEFAULT 0,
                 status TEXT DEFAULT 'active',
+                phase TEXT,
+                phase_confidence REAL,
+                phase_updated_at DATETIME,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         ''')
@@ -346,6 +349,62 @@ class ChatDatabase:
                 'used_responses': used_responses
             }
         }
+    
+    def update_session_phase(self, session_id: str, phase: str, confidence: float) -> bool:
+        """Update session with detected phase"""
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            cursor.execute('''
+                UPDATE chat_sessions 
+                SET phase = ?, phase_confidence = ?, phase_updated_at = ?
+                WHERE session_id = ?
+            ''', (phase, confidence, datetime.now(), session_id))
+            
+            rows_affected = cursor.rowcount
+            conn.commit()
+            conn.close()
+            
+            if rows_affected > 0:
+                print(f"[DB] Updated session {session_id} with phase: {phase} ({confidence:.1%})")
+                return True
+            else:
+                print(f"[DB WARN] Session {session_id} not found for phase update")
+                return False
+                
+        except Exception as e:
+            print(f"[DB ERROR] Failed to update phase: {e}")
+            return False
+    
+    def get_session_with_phase(self, session_id: str) -> Optional[Dict]:
+        """Get session including detected phase"""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        cursor.execute('''
+            SELECT session_id, chat_platform, chat_title, participant_name,
+                   last_activity, total_messages, phase, phase_confidence, phase_updated_at
+            FROM chat_sessions 
+            WHERE session_id = ?
+        ''', (session_id,))
+        
+        row = cursor.fetchone()
+        conn.close()
+        
+        if row:
+            return {
+                'session_id': row[0],
+                'platform': row[1],
+                'title': row[2],
+                'participant': row[3],
+                'last_activity': row[4],
+                'total_messages': row[5],
+                'phase': row[6],
+                'phase_confidence': row[7],
+                'phase_updated_at': row[8]
+            }
+        return None
 
 if __name__ == "__main__":
     # Test database creation

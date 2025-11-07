@@ -19,7 +19,7 @@ import sys
 if sys.platform == "win32":
     sys.stdout.reconfigure(encoding='utf-8')
 
-# Phase labels
+# Phase label that will be used for classification
 PHASE_LABELS = [
     'initial_response',
     'ask_details', 
@@ -30,27 +30,27 @@ PHASE_LABELS = [
     'structure_clarification',
     'contract_acceptance'
 ]
-
+# Mapping phase labels to IDs and vice versa
 PHASE_TO_ID = {phase: idx for idx, phase in enumerate(PHASE_LABELS)}
 ID_TO_PHASE = {idx: phase for phase, idx in PHASE_TO_ID.items()}
 
 
 class PhaseDataset(Dataset):
     """Dataset for conversation phase classification"""
-    
+    # initialize dataset with contexts, phases, tokenizer, and max length
     def __init__(self, contexts, phases, tokenizer, max_length=256):
         self.contexts = contexts
         self.phases = phases
         self.tokenizer = tokenizer
         self.max_length = max_length
-    
+    # return length of dataset
     def __len__(self):
         return len(self.contexts)
-    
+    # get item of context and phase at index
     def __getitem__(self, idx):
         context = str(self.contexts[idx])
         phase = self.phases[idx]
-        
+        # tokenize context
         encoding = self.tokenizer.encode_plus(
             context,
             add_special_tokens=True,
@@ -60,7 +60,7 @@ class PhaseDataset(Dataset):
             return_attention_mask=True,
             return_tensors='pt'
         )
-        
+        # return dictionary of input ids, attention mask, and label
         return {
             'input_ids': encoding['input_ids'].flatten(),
             'attention_mask': encoding['attention_mask'].flatten(),
@@ -70,13 +70,16 @@ class PhaseDataset(Dataset):
 
 class PhaseClassifier(nn.Module):
     """BERT-based phase classifier"""
-    
+    # initialize phase classifier model
+    # model
+    # dropout layer
+    # linear classifier layer
     def __init__(self, n_classes=8, dropout=0.3):
         super(PhaseClassifier, self).__init__()
         self.bert = BertModel.from_pretrained('bert-base-uncased')
         self.dropout = nn.Dropout(dropout)
         self.classifier = nn.Linear(self.bert.config.hidden_size, n_classes)
-    
+    # forward it to model and return output
     def forward(self, input_ids, attention_mask):
         outputs = self.bert(
             input_ids=input_ids,
@@ -86,7 +89,7 @@ class PhaseClassifier(nn.Module):
         output = self.dropout(pooled_output)
         return self.classifier(output)
 
-
+# load tra
 def load_training_data(file_path):
     """Load phase training data from JSON"""
     print(f"[INFO] Loading training data from {file_path}...")

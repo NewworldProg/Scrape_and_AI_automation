@@ -334,11 +334,11 @@
             
         <div class="stats-grid">
             <div class="stat-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
-                <div class="stat-number">0</div>
+                <div class="stat-number">51</div>
                 <div class="stat-label">Active Sessions</div>
             </div>
             <div class="stat-card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
-                <div class="stat-number">0</div>
+                <div class="stat-number">803</div>
                 <div class="stat-label">Total Messages</div>
             </div>
             <div class="stat-card" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
@@ -346,7 +346,7 @@
                 <div class="stat-label">AI Suggestions</div>
             </div>
             <div class="stat-card" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">
-                <div class="stat-number">0.4</div>
+                <div class="stat-number">0.5</div>
                 <div class="stat-label">Avg Confidence</div>
             </div>
         </div>
@@ -356,9 +356,69 @@
                 <div class="section">
                     <h2>📱 Active Chat Sessions</h2>
                     
-            <div class="empty-state">
-                <h3>No Active Sessions</h3>
-                <p>Start a chat conversation to see sessions here.</p>
+            <div class="session-item">
+                <div class="session-header">
+                    <div class="session-title">Upwork Chat Session</div>
+                    <div class="platform-badge">upwork</div>
+                </div>
+                <div class="session-details">
+                    <strong>Participant:</strong> Unknown | 
+                    <strong>Messages:</strong> 3 |
+                    <span class="timestamp">Just now</span>
+                </div>
+                
+            </div>
+            
+            <div class="session-item">
+                <div class="session-header">
+                    <div class="session-title">Upwork Chat Session</div>
+                    <div class="platform-badge">upwork</div>
+                </div>
+                <div class="session-details">
+                    <strong>Participant:</strong> Unknown | 
+                    <strong>Messages:</strong> 4 |
+                    <span class="timestamp">1 hours ago</span>
+                </div>
+                
+            </div>
+            
+            <div class="session-item">
+                <div class="session-header">
+                    <div class="session-title">Upwork Chat Session</div>
+                    <div class="platform-badge">upwork</div>
+                </div>
+                <div class="session-details">
+                    <strong>Participant:</strong> Unknown | 
+                    <strong>Messages:</strong> 4 |
+                    <span class="timestamp">3 hours ago</span>
+                </div>
+                
+            </div>
+            
+            <div class="session-item">
+                <div class="session-header">
+                    <div class="session-title">Upwork Chat Session</div>
+                    <div class="platform-badge">upwork</div>
+                </div>
+                <div class="session-details">
+                    <strong>Participant:</strong> Unknown | 
+                    <strong>Messages:</strong> 4 |
+                    <span class="timestamp">3 hours ago</span>
+                </div>
+                
+            </div>
+            
+            <div class="session-item">
+                <div class="session-header">
+                    <div class="session-title">Upwork Chat Session</div>
+                    <div class="platform-badge">upwork</div>
+                </div>
+                <div class="session-details">
+                    <strong>Participant:</strong> Unknown | 
+                    <strong>Messages:</strong> 20 |
+                    <span class="timestamp">10 hours ago</span>
+                </div>
+                
             </div>
             
                 </div>
@@ -368,70 +428,38 @@
                     
                 <div class="ai-suggestion">
                     <div class="suggestion-header">
-                        <strong>All Response Modes</strong>
-                        <div class="confidence-badge">38.0%</div>
+                        <strong>Template + AI Responses</strong>
+                        <div class="confidence-badge">47.2%</div>
                     </div>
-                    <div class="timestamp">22 hours ago</div>
+                    <div class="timestamp">3 hours ago</div>
                     <div class="response-options">
                         
                 <div style="margin-bottom: 15px; padding: 10px; background: #e3f2fd; border-radius: 8px;">
-                    <strong>📊 Detected Phase:</strong> Contract & Start 
-                    <span style="color: #666; font-size: 0.9em;">(ml_model)</span><br>
-                    <strong>🎯 Total Options:</strong> 6 responses across 4 modes
+                    <strong>📊 Detected Phase:</strong> contract_acceptance 
+                    <span style="color: #666; font-size: 0.9em;">(bert_phase_detector)</span><br>
+                    <strong>🎯 Response Modes:</strong> Template + AI Comparison
                 </div>
                 
                     <div style="margin: 15px 0; padding: 15px; background: #f1f8e9; border-left: 4px solid #8bc34a; border-radius: 8px;">
-                        <strong>✅ Template Only (Fast)</strong> 
-                        <span style="color: #666;">(~0.1s)</span><br>
-                        <em style="color: #666; font-size: 0.9em;">Pre-written professional templates</em>
+                        <strong>✅ Template Response</strong> 
+                        <span style="color: #666;">(Pre-written Professional)</span><br>
                         <div style="margin-top: 10px;">
+                            <div class="response-option" onclick="copyResponse('Contract accepted! Starting work now. You\'ll have it by the deadline.')">
+                                <strong>Template:</strong> Contract accepted! Starting work now. You'll have it by the deadline.
+                            </div>
+                        </div>
+                    </div>
                     
-                        <div class="response-option" onclick="copyResponse('Contract accepted! I\'ll start working on this immediately and keep you updated.')">
-                            <strong>Option 1:</strong> Contract accepted! I'll start working on this immediately and keep you updated.
-                        </div>
-                        
-                        <div class="response-option" onclick="copyResponse('Thank you! I\'ve accepted the offer. I\'ll deliver high-quality work by the deadline.')">
-                            <strong>Option 2:</strong> Thank you! I've accepted the offer. I'll deliver high-quality work by the deadline.
-                        </div>
-                        
-                        <div class="response-option" onclick="copyResponse('Great! Starting now. You can expect the first deliverable by [deadline].')">
-                            <strong>Option 3:</strong> Great! Starting now. You can expect the first deliverable by [deadline].
-                        </div>
-                        </div></div>
-                    <div style="margin: 15px 0; padding: 15px; background: #fff3e0; border-left: 4px solid #ff9800; border-radius: 8px;">
-                        <strong>🔗 Hybrid (Template + AI)</strong> 
-                        <span style="color: #666;">(~2s)</span><br>
-                        <em style="color: #666; font-size: 0.9em;">Template base with AI personalization</em>
-                        <div style="margin-top: 10px;">
-                    
-                        <div class="response-option" onclick="copyResponse('Thank you for your interest in this topic.')">
-                            <strong>Option 1:</strong> Thank you for your interest in this topic.
-                        </div>
-                        </div></div>
                     <div style="margin: 15px 0; padding: 15px; background: #f3e5f5; border-left: 4px solid #9c27b0; border-radius: 8px;">
-                        <strong>🤖 Pure AI Generation</strong> 
-                        <span style="color: #666;">(~3s)</span><br>
-                        <em style="color: #666; font-size: 0.9em;">Fully AI-generated from context</em>
+                        <strong>🤖 AI Response</strong> 
+                        <span style="color: #666;">(GPT-2 Generated)</span><br>
                         <div style="margin-top: 10px;">
-                    
-                        <div class="response-option" onclick="copyResponse('Https://twitter.')">
-                            <strong>Option 1:</strong> Https://twitter.
+                            <div class="response-option" onclick="copyResponse('Please answer all questions from the time you are hired to the date you sign the contract.')">
+                                <strong>AI:</strong> Please answer all questions from the time you are hired to the date you sign the contract.
+                            </div>
                         </div>
-                        </div></div>
-                    <div style="margin: 15px 0; padding: 15px; background: #e1f5fe; border-left: 4px solid #03a9f4; border-radius: 8px;">
-                        <strong>📝 Template + AI Summary</strong> 
-                        <span style="color: #666;">(~2s)</span><br>
-                        <em style="color: #666; font-size: 0.9em;">Template with AI context summary</em>
-                        <div style="margin-top: 10px;">
+                    </div>
                     
-                        <div class="response-option" onclick="copyResponse('Contract accepted! I\'ll start working on this immediately and keep you updated.
-
-📝 Context: I hope to have more information about the project by the end of the month.')">
-                            <strong>Option 1:</strong> Contract accepted! I'll start working on this immediately and keep you updated.
-
-📝 Context: I hope to have more information about the project by the end of the month.
-                        </div>
-                        </div></div>
                     </div>
                 </div>
                 
