@@ -1,3 +1,5 @@
+# takes parameters from the command line to determine
+# dry run, force reinstall, workflows only, and install path with default path "."
 param(
     [switch]$DryRun,
     [switch]$Force,
@@ -7,31 +9,36 @@ param(
 
 # Enhanced N8N Upwork Notification System Installer
 # Version 2.0 - Complete Installation with Node.js Dependencies
-
+# log that installer is starting
+# give it neon color (foreground cyan)
 Write-Host @"
 
                 N8N UPWORK NOTIFICATION SYSTEM                 
                     Enhanced Auto-Installer                       
 
 "@ -ForegroundColor Cyan
-
+# log if dry run is activated which means no changes will be made just checking if steps would succeed
 if ($DryRun) {
     Write-Host " DRY RUN MODE - No changes will be made" -ForegroundColor Yellow
     Write-Host ""
 }
 
 # Setup paths
+# inside var put Get_location function for checking current directory
 $originalPath = Get-Location
+# inside newBasePath var put Resolve-Path function for getting full path of install location = "."
 $newBasePath = Resolve-Path $InstallPath
+# make venvPath var Join-Path function newPath + "venv"
 $venvPath = Join-Path $newBasePath "venv"
 
+# log installation path that will be used
 Write-Host " Installation Path: $newBasePath" -ForegroundColor Green
 Write-Host ""
 
-# STEP 1: NODE.JS DEPENDENCIES
+# log STEP 1: NODE.JS DEPENDENCIES
 Write-Host " STEP 1: Installing Node.js Dependencies..." -ForegroundColor Magenta
 
-# Check for Node.js
+# inside var script to check for Node.js + write log if found or not found
 try {
     $nodeVersion = node --version
     Write-Host "   Node.js found: $nodeVersion" -ForegroundColor Green
@@ -41,7 +48,7 @@ catch {
     exit 1
 }
 
-# Check for npm  
+# inside dar script to check for npm  + write log if found or not found
 try {
     $npmVersion = npm --version
     Write-Host "   npm found: $npmVersion" -ForegroundColor Green
@@ -64,7 +71,8 @@ catch {
     }
 }
 
-# Check if package.json exists and install local dependencies
+# Check if package.json exists by joining dir path and package.json if not makes one
+# install local dependencies inside package.json if not in DryRun mode
 $packageJsonPath = Join-Path $newBasePath "package.json"
 if (Test-Path $packageJsonPath) {
     Write-Host "   Installing local Node.js dependencies..." -ForegroundColor Yellow
@@ -79,7 +87,7 @@ else {
     if (-not $DryRun) {
         Set-Location $newBasePath
         
-        # Create comprehensive package.json
+        # local dependencies that will be added to package.json
         $packageJson = @{
             name            = "upwork-notification-system"
             version         = "1.0.0"
@@ -117,16 +125,24 @@ else {
         
         $packageJson | ConvertTo-Json -Depth 4 | Out-File -FilePath "package.json" -Encoding UTF8
         
-        # Install dependencies
+        # Install dependencies after creating package.json
         npm install
         Write-Host "   Created package.json and installed dependencies" -ForegroundColor Green
     }
 }
 
 # STEP 2: PYTHON VIRTUAL ENVIRONMENT (if not workflows-only)
+# if not workflows-only flag is set skip python venv setup
 if (-not $WorkflowsOnly) {
     Write-Host "`n STEP 2: Python Virtual Environment..." -ForegroundColor Magenta
-    
+    # Check if venv exists
+    # if force flag is set delete and recreate
+    # if not force flag if venv exists skip creation and tell user that venv exists
+    # create venv it it does not exist or force is set inside venvPath
+    # activate venv and install packages from requirements.txt or common packages
+    # 1. make activateScript with venvPath + Scripts\Activate.ps1
+    # 2. activate venv
+    # 3. install packages
     if (Test-Path $venvPath) {
         if ($Force) {
             Write-Host "  [DELETE] Removing existing environment..." -ForegroundColor Yellow
@@ -138,7 +154,6 @@ if (-not $WorkflowsOnly) {
             Write-Host "   Virtual environment exists (use -Force to recreate)" -ForegroundColor Green
         }
     }
-    
     if (-not (Test-Path $venvPath) -or $Force) {
         Write-Host "   Creating Python virtual environment..." -ForegroundColor Yellow
         if (-not $DryRun) {
@@ -168,7 +183,7 @@ if (-not $WorkflowsOnly) {
     if (-not $DryRun) {
         Write-Host "   Creating helper scripts..." -ForegroundColor Yellow
         
-        # Create activate script
+        # Create activate script with venvPath + Scripts\Activate.ps1 + your custom message
         $activateContent = @"
 Write-Host "Activating Upwork Notification System..." -ForegroundColor Cyan
 & "$venvPath\Scripts\Activate.ps1"
@@ -208,7 +223,9 @@ n8n start
     }
 }
 
-# STEP 3: N8N WORKFLOWS
+# STEP 3: N8N WORKFLOWS creation
+# check for workflow json files in current directory
+# count how many are found and log found/missing
 Write-Host "`n STEP 3: N8N Workflow Setup..." -ForegroundColor Magenta
 
 $workflowFiles = @(
@@ -231,7 +248,7 @@ foreach ($workflow in $workflowFiles) {
         Write-Host "    Missing: $workflow" -ForegroundColor Yellow
     }
 }
-
+# if any workflows found process them
 if ($foundWorkflows -gt 0) {
     Write-Host "   $foundWorkflows workflow(s) found - processing paths..." -ForegroundColor Green
     
@@ -248,6 +265,7 @@ if ($foundWorkflows -gt 0) {
             $destinationPath = Join-Path $n8nDir $workflow
             $originalContent = Get-Content $workflow -Raw -Encoding UTF8
             
+            # copy original content to content variable for safe manipulation
             # Replace hardcoded paths - safe string replacement
             $content = $originalContent
             $oldPathWindows = "E:\\Repoi\\UpworkNotif"
@@ -259,7 +277,7 @@ if ($foundWorkflows -gt 0) {
             $content = $content.Replace($oldPathUnix, $newPathJson)
             $content = $content.Replace("E:\Repoi\UpworkNotif", $newPathJson)
             
-            # Save updated workflow
+            # Save updated workflow in n8n/ directory and log
             Set-Content -Path $destinationPath -Value $content -Encoding UTF8
             Write-Host "     Processed: $workflow -> n8n/" -ForegroundColor Green
         }
@@ -275,6 +293,7 @@ else {
 }
 
 # STEP 4: ENVIRONMENT CONFIGURATION
+# makes template for user to copy when they set up their .env file
 Write-Host "`n  STEP 4: Environment Configuration..." -ForegroundColor Magenta
 
 if (-not (Test-Path ".env")) {
@@ -317,6 +336,7 @@ else {
 }
 
 # STEP 5: FINAL SETUP AND SUMMARY
+# log installation complete and summary of steps done
 Write-Host "`n Installation Complete!" -ForegroundColor Cyan
 Write-Host ""
 Write-Host " Summary:" -ForegroundColor White

@@ -2,6 +2,20 @@
 
 **Complete automated system for job hunting with AI-powered chat responses, cover letter generation, and intelligent scraping**
 
+## ⚠️ **AI Model Training Notice**
+
+**Starting AI models use base/untrained models with fallback logic:**
+- **Phase Detection**: Uses base BERT (lower accuracy)  
+- **Chat Responses**: Uses base GPT-2 (less contextual)
+- **Cover Letters**: Uses base GPT-2 (generic responses)
+
+**For better performance, train custom models using the training data in:**
+- [`ai/phase_detector_trainer/`](ai/phase_detector_trainer/) - BERT phase detection training
+- [`ai/chat_bot_trainer/`](ai/chat_bot_trainer/) - GPT-2 chat response training  
+- [`ai/cover_letter_trainer/`](ai/cover_letter_trainer/) - GPT-2 cover letter training
+
+📖 **[See AI Training Guide](README-ai-training.md)** for detailed instructions.
+
 ![Python](https://img.shields.io/badge/python-3.8+-blue.svg)
 ![Node.js](https://img.shields.io/badge/node.js-16+-green.svg)
 ![n8n](https://img.shields.io/badge/n8n-workflow-orange.svg)
@@ -72,22 +86,33 @@ n8n Frontend → PowerShell Scripts → Python/JavaScript Code
 │   ├── run_generate_and_open_dashboard.ps1 # Job dashboard generator
 │   └── run_generate_and_open_chat_dashboard.ps1 # Chat dashboard generator
 │
-├── 📁 scripts/                          # Core Python scripts
-│   ├── data_parser.py                 # Parse scraped job HTML
-│   ├── chat_parser.py                  # Parse chat conversations
-│   └── smart_cover_letter_generator.py # AI cover letter logic
+├── 📁 scripts/                          # Core inference scripts (use trained models)
+│   ├── phase_detector.py               # BERT phase detection (with fallback)
+│   ├── smart_chat_response.py          # GPT-2 chat responses (with fallback)
+│   ├── standalone_phase_detector.py    # Phase detection testing
+│   ├── smart_cover_letter_generator.py # Cover letter generation (with fallback)
+│   ├── data_parser.py                  # Parse scraped job HTML
+│   └── chat_parser.py                  # Parse chat conversations
 │
 ├── 📁 ai/                              # AI & Machine Learning
-│   ├── smart_chat_response.py          # BERT + GPT-2 chat responses
-│   ├── phase_detector.py               # Conversation phase detection
-│   ├── train_chat_gpt2.py              # Custom GPT-2 model training
-│   ├── phase_training_data.json        # BERT training dataset (53 conversations)
-│   ├── 📁 trained_models/              # Pre-trained AI models
-│   │   ├── 📁 phase_classifier_v1/     # BERT model (110M params)
-│   │   └── 📁 final_chat_model/        # Custom trained GPT-2
-│   └── 📁 training_data/               # Training datasets
-│       ├── 📁 parsed_data/             # JSON training files
-│       └── 📁 raw_data/                # Original conversation data
+│   ├── 📁 phase_detector_trainer/      # BERT Phase Detection Training
+│   │   ├── train_phase_classifier.py   # Training script (87.5% accuracy)
+│   │   ├── 📁 training_data/           # 53 labeled conversations
+│   │   │   └── phase_training_data.json
+│   │   └── 📁 trained_models/          # Output trained BERT models
+│   │       └── phase_classifier_v1/    # Production model
+│   ├── 📁 chat_bot_trainer/            # GPT-2 Chat Response Training  
+│   │   ├── train_chat_gpt2.py          # Training script
+│   │   ├── 📁 training_data/           # 11 conversation examples
+│   │   │   └── training_data_parsed.json
+│   │   └── 📁 trained_models/          # Output trained GPT-2 models
+│   │       └── final_chat_model/       # Production chat model
+│   └── 📁 cover_letter_trainer/        # GPT-2 Cover Letter Training
+│       ├── model_training.py           # Training script
+│       ├── 📁 training_data/           # Cover letter templates
+│       │   └── training_data.json
+│       └── 📁 trained_models/          # Output cover letter models
+│           └── custom_cover_letter_model/ # Production model
 │
 ├── 📁 js_scrapers/                     # Browser automation
 │   ├── browser_connect_puppeteer.js    # Job scraping (Chrome port 9222)
