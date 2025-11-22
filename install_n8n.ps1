@@ -7,13 +7,13 @@ param(
     [string]$InstallPath = "."
 )
 
-# Enhanced N8N Upwork Notification System Installer
+# Enhanced N8N Scrape and AI Automation System Installer
 # Version 2.0 - Complete Installation with Node.js Dependencies
 # log that installer is starting
 # give it neon color (foreground cyan)
 Write-Host @"
 
-                N8N UPWORK NOTIFICATION SYSTEM                 
+                N8N SCRAPE & AI AUTOMATION SYSTEM                 
                     Enhanced Auto-Installer                       
 
 "@ -ForegroundColor Cyan
@@ -89,7 +89,7 @@ else {
         
         # local dependencies that will be added to package.json
         $packageJson = @{
-            name            = "upwork-notification-system"
+            name            = "scrape-ai-automation-system"
             version         = "1.0.0"
             description     = "Automated job scraping and notification system for Upwork"
             main            = "index.js"
@@ -100,7 +100,7 @@ else {
             }
             repository      = @{
                 type = "git"
-                url  = "https://github.com/username/upwork-notification-system.git"
+                url  = "https://github.com/username/scrape-ai-automation-system.git"
             }
             keywords        = @("upwork", "scraping", "automation", "notifications", "n8n")
             author          = "Your Name"
@@ -185,7 +185,7 @@ if (-not $WorkflowsOnly) {
         
         # Create activate script with venvPath + Scripts\Activate.ps1 + your custom message
         $activateContent = @"
-Write-Host "Activating Upwork Notification System..." -ForegroundColor Cyan
+Write-Host "Activating Scrape and AI Automation System..." -ForegroundColor Cyan
 & "$venvPath\Scripts\Activate.ps1"
 Write-Host "Environment activated! Project: $newBasePath" -ForegroundColor Green
 "@
@@ -220,6 +220,34 @@ n8n start
         $startN8nContent | Out-File -FilePath "start_n8n.ps1" -Encoding UTF8
         
         Write-Host "   Helper scripts created" -ForegroundColor Green
+    }
+
+    # Replace absolute paths in N8N workflow files
+    if (-not $DryRun) {
+        Write-Host "   Updating workflow paths..." -ForegroundColor Yellow
+        
+        $workflowFiles = @(
+            "n8n_workflow_conditional.json",
+            "n8n_ai_cover_letter_workflow.json", 
+            "n8n_chat_ai_workflow.json",
+            "n8n_database_cleanup_workflow.json"
+        )
+
+        foreach ($file in $workflowFiles) {
+            if (Test-Path $file) {
+                $content = Get-Content $file -Raw -Encoding UTF8
+                # Replace various path formats and placeholders
+                $normalizedPath = $newBasePath.Replace('\', '\\')
+                $content = $content -replace "E:\\\\\\\\Repoi\\\\\\\\UpworkNotif", $normalizedPath
+                $content = $content -replace "E:\\\\Repoi\\\\UpworkNotif", $normalizedPath
+                $content = $content -replace "E:/Repoi/UpworkNotif", $newBasePath.Replace('\', '/')
+                $content = $content -replace "\{\{PROJECT_ROOT\}\}", $normalizedPath
+                Set-Content $file -Value $content -Encoding UTF8
+                Write-Host "     Updated: $file" -ForegroundColor Gray
+            }
+        }
+        
+        Write-Host "   Workflow paths updated to: $newBasePath" -ForegroundColor Green
     }
 }
 
@@ -300,7 +328,7 @@ if (-not (Test-Path ".env")) {
     Write-Host "   Creating .env template..." -ForegroundColor Yellow
     if (-not $DryRun) {
         $envTemplate = @"
-# Upwork Notification System Configuration
+# Scrape and AI Automation System Configuration
 # Copy this to .env and fill in your values
 
 # N8N Configuration
@@ -356,7 +384,7 @@ if (-not $WorkflowsOnly) {
     Write-Host "4. Activate Python environment: .\activate_env.ps1" -ForegroundColor White
 }
 
-Write-Host "`n Enjoy your Upwork Notification System!" -ForegroundColor Magenta
+Write-Host "`n 🎉 Enjoy your Scrape and AI Automation System!" -ForegroundColor Magenta
 
 # Return to original location
 Set-Location $originalPath

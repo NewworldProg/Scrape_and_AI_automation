@@ -1,6 +1,6 @@
-﻿# 🤖 Upwork AI Automation System
+﻿# 🤖 Scrape and AI Automation System
 
-**Complete automated system for job hunting with AI-powered chat responses, cover letter generation, and intelligent scraping**
+**Complete automated system for web scraping and AI automation with intelligent chat responses, content generation, and data processing**
 
 ## ⚠️ **AI Model Training Notice**
 
@@ -33,7 +33,7 @@
 
 ## 🔄 How It Works
 
-This system uses **n8n workflows** to orchestrate automated job hunting tasks:
+This system uses **n8n workflows** to orchestrate automated web scraping and AI automation tasks:
 
 ```
 n8n Frontend → PowerShell Scripts → Python/JavaScript Code
@@ -43,8 +43,8 @@ n8n Frontend → PowerShell Scripts → Python/JavaScript Code
 
 | Workflow | Description | README |
 |----------|-------------|---------|
-| **Job Scraper** | Automated job scraping with Chrome debug mode | [📖 README-job-scraper.md](README-job-scraper.md) |
-| **Cover Letter Generator** | AI-powered personalized cover letters | [📖 README-cover-letter.md](README-cover-letter.md) |
+| **Web Scraper** | Automated web scraping with Chrome debug mode | [📖 README-job-scraper.md](README-job-scraper.md) |
+| **AI Content Generator** | AI-powered personalized content generation | [📖 README-cover-letter.md](README-cover-letter.md) |
 | **Chat AI Assistant** | Smart chat responses with BERT + GPT-2 | [📖 README-chat-ai.md](README-chat-ai.md) |
 | **Database Cleanup** | Automated database maintenance | [📖 README-database-cleanup.md](README-database-cleanup.md) |
 
@@ -61,37 +61,37 @@ n8n Frontend → PowerShell Scripts → Python/JavaScript Code
 ## 📁 Project Structure
 
 ```
-📦 UpworkNotif/
-├── 🔄 n8n_workflow_conditional.json      # Job scraper workflow
-├── 📝 n8n_ai_cover_letter_workflow.json  # Cover letter generator workflow  
+📦 Scrape_and_AI_automation/
+├── 🔄 n8n_workflow_conditional.json      # Web scraper workflow
+├── 📝 n8n_ai_cover_letter_workflow.json  # AI content generator workflow  
 ├── 🤖 n8n_chat_ai_workflow.json          # Chat AI assistant workflow
 ├── 🗂️ n8n_database_cleanup_workflow.json # Database maintenance workflow
 ├── 🎯 install_n8n.ps1                    # One-click n8n workflow installer
 │
 ├── 📁 run_scripts/                       # PowerShell workflow runners
-│   ├── run_js_scraper.ps1               # Execute job scraping
-│   ├── run_smart_cover_letter.ps1       # Generate AI cover letters
+│   ├── run_js_scraper.ps1               # Execute web scraping
+│   ├── run_smart_cover_letter.ps1       # Generate AI content
 │   ├── run_chat_scraper.ps1             # Monitor chat conversations
 │   ├── run_chat_parser.ps1              # Parse chat HTML to database
-│   ├── run_check_chrome_n8n.ps1         # Check job Chrome status (port 9222)
+│   ├── run_check_chrome_n8n.ps1         # Check scraping Chrome status (port 9222)
 │   ├── run_check_chrome_chat.ps1        # Check chat Chrome status (port 9223)
-│   ├── run_start_chrome_simple.ps1      # Start job Chrome profile
+│   ├── run_start_chrome_simple.ps1      # Start scraping Chrome profile
 │   ├── run_start_chrome_chat_simple.ps1 # Start chat Chrome profile
 │   ├── run_detect_phase_standalone.ps1  # BERT phase detection only
 │   ├── run_generate_response.ps1        # Database-driven response generation
 │   ├── run_save_html_to_db.ps1          # Save scraped HTML to database
-│   ├── run_parse_html_only.ps1          # Parse job HTML
-│   ├── run_import_jobs_to_db.ps1        # Import jobs to database
-│   ├── run_get_latest_job_without_cover_letter.ps1 # Get job for cover letter
-│   ├── run_generate_and_open_dashboard.ps1 # Job dashboard generator
+│   ├── run_parse_html_only.ps1          # Parse scraped HTML
+│   ├── run_import_jobs_to_db.ps1        # Import data to database
+│   ├── run_get_latest_job_without_cover_letter.ps1 # Get items for AI processing
+│   ├── run_generate_and_open_dashboard.ps1 # Data dashboard generator
 │   └── run_generate_and_open_chat_dashboard.ps1 # Chat dashboard generator
 │
 ├── 📁 scripts/                          # Core inference scripts (use trained models)
 │   ├── phase_detector.py               # BERT phase detection (with fallback)
 │   ├── smart_chat_response.py          # GPT-2 chat responses (with fallback)
 │   ├── standalone_phase_detector.py    # Phase detection testing
-│   ├── smart_cover_letter_generator.py # Cover letter generation (with fallback)
-│   ├── data_parser.py                  # Parse scraped job HTML
+│   ├── smart_cover_letter_generator.py # AI content generation (with fallback)
+│   ├── data_parser.py                  # Parse scraped HTML data
 │   └── chat_parser.py                  # Parse chat conversations
 │
 ├── 📁 ai/                              # AI & Machine Learning
@@ -115,50 +115,51 @@ n8n Frontend → PowerShell Scripts → Python/JavaScript Code
 │           └── custom_cover_letter_model/ # Production model
 │
 ├── 📁 js_scrapers/                     # Browser automation
-│   ├── browser_connect_puppeteer.js    # Job scraping (Chrome port 9222)
+│   ├── browser_connect_puppeteer.js    # Web scraping (Chrome port 9222)
 │   ├── browser_connect_chat.js         # Chat monitoring (Chrome port 9223)
 │   └── package.json                    # Node.js dependencies
 │
 ├── 📁 data/                            # Database management
-│   ├── database_manager.py             # Job database operations
+│   ├── database_manager.py             # Main database operations
 │   ├── chat_database_manager.py        # Chat database operations
 │   ├── chat_data.db                    # SQLite chat database
-│   └── upwork_data.db                  # Main job database
+│   └── upwork_data.db                  # Main data database
 │
 ├── 📁 dashboard_generate/              # HTML dashboard creation
-│   ├── generate_dashboard_enhanced.py  # Job dashboard with stats
+│   ├── generate_dashboard_enhanced.py  # Data dashboard with stats
 │   └── chat_dashboard_generator.py     # Chat response dashboard
 │
 ├── 📁 trained_models/                  # Additional ML models
 │   └── 📁 advanced_cover_letter_model/ # Fine-tuned GPT-2 for cover letters
 │       └── 📁 final/                   # Production model files
 │
-├── 📁 chrome_profile/                  # Job scraping Chrome profile (port 9222)
+├── 📁 chrome_profile/                  # Scraping Chrome profile (port 9222)
 ├── 📁 chrome_profile_chat/             # Chat monitoring Chrome profile (port 9223)
 ├── 📁 n8n/                            # Generated n8n workflows (created after install_n8n.ps1)
-│   ├── n8n_workflow_conditional.json  # Ready-to-import job scraper workflow
-│   ├── n8n_ai_cover_letter_workflow.json # Ready-to-import cover letter workflow
+│   ├── n8n_workflow_conditional.json  # Ready-to-import web scraper workflow
+│   ├── n8n_ai_cover_letter_workflow.json # Ready-to-import content generator workflow
 │   ├── n8n_chat_ai_workflow.json      # Ready-to-import chat AI workflow
 │   └── n8n_database_cleanup_workflow.json # Ready-to-import cleanup workflow
 ├── 📁 backup_n8n_original/             # Auto-generated workflow backups
 ├── 📁 docs/                           # Additional documentation
 ├── 📁 cookies/                        # Browser session data
 │
-├── 📄 README-job-scraper.md           # Job scraper workflow documentation
-├── 📄 README-cover-letter.md          # Cover letter workflow documentation
+├── 📄 README-job-scraper.md           # Web scraper workflow documentation
+├── 📄 README-cover-letter.md          # Content generator workflow documentation
 ├── 📄 README-chat-ai.md               # Chat AI workflow documentation
 ├── 📄 README-database-cleanup.md      # Database cleanup workflow documentation
+├── 📄 README-ai-training.md           # AI training guide
 ├── 📄 INSTALLATION_GUIDE.md           # Complete installation instructions
 ├── 📄 QUICKSTART.md                   # Quick setup guide
 ├── 📄 PATH_INSTALLATION_GUIDE.md      # Path configuration guide
 │
 ├── 📄 requirements.txt                 # Python dependencies
 ├── 📄 package.json                     # Node.js dependencies
-├── 📄 upwork_jobs.db                   # Alternative job database
-├── 📄 dashboard.html                   # Generated job dashboard
+├── 📄 upwork_jobs.db                   # Alternative data database
+├── 📄 dashboard.html                   # Generated data dashboard
 ├── 📄 chat_dashboard.html              # Generated chat dashboard
 ├── 📄 temp_ai_suggestions.json         # Temporary AI response data
-└── 📄 temp_selected_job.json           # Temporary job selection data
+└── 📄 temp_selected_job.json           # Temporary selection data
 ```
 
 ## ⚖️ Legal Disclaimer
@@ -173,12 +174,12 @@ By accessing or using this code, you agree to the following terms:
 
 1. **No Liability**: The developer(s) of this software are **NOT responsible** for:
    - How this software is used by third parties
-   - Any violations of terms of service of third-party platforms (including but not limited to Upwork)
+   - Any violations of terms of service of third-party platforms
    - Data loss, account suspension, legal issues, or any damages arising from use
    - Compliance with applicable laws and regulations in your jurisdiction
 
 2. **Use at Your Own Risk**: This software is provided "AS IS" without warranty of any kind. Users assume **full responsibility** for:
-   - Compliance with Upwork Terms of Service
+   - Compliance with platform Terms of Service
    - Compliance with automation/scraping policies of any platforms used
    - Any consequences resulting from use of this software
    - Proper configuration and security of their systems
@@ -195,7 +196,7 @@ By accessing or using this code, you agree to the following terms:
 
 ### ⚠️ Platform Terms Compliance
 **WARNING**: Automated interaction with websites may violate their Terms of Service. Before using this software:
-- Review Upwork's Terms of Service and API usage policies
+- Review platform Terms of Service and API usage policies
 - Ensure compliance with all applicable platform policies
 - Consider using official APIs instead of web scraping where available
 - Obtain proper authorization before automating any platform interactions

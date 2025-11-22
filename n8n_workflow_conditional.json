@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "Upwork Scraper Conditional",
   "nodes": [
     {
@@ -181,8 +181,8 @@
       "__comment": "======== node for cleaning database duplicates ==============",
       "works": "removes duplicate jobs and cleans old scraped data before dashboard generation",
       "parameters": {
-        "command": "python E:\\\\Repoi\\\\UpworkNotif\\\\scripts\\\\cleanup_job_database.py",
-        "workingDirectory": "E:\\\\Repoi\\\\UpworkNotif"
+        "command": "python E:\\Repoi\\UpworkNotif\\\\scripts\\\\cleanup_job_database.py",
+        "workingDirectory": "E:\\Repoi\\UpworkNotif"
       },
       "id": "ahafcafb-1fc5-4b7b-9e8e-9f5f5c6e7dda",
       "name": "Cleanup Database Duplicates",
