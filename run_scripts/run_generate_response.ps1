@@ -52,11 +52,11 @@ Write-Host "Generating responses..." -ForegroundColor Cyan
 
 if ($Phase -ne 'auto') {
     # Use specified phase
-    python ai\smart_chat_response.py --session-id latest --mode $Mode --phase $Phase
+    python scripts\smart_chat_response.py --session-id latest --mode $Mode --phase $Phase
 }
 else {
     # Auto-detect phase
-    python ai\smart_chat_response.py --session-id latest --mode $Mode
+    python scripts\smart_chat_response.py --session-id latest --mode $Mode
 }
 
 Write-Host ""

@@ -10,7 +10,7 @@ param(
 # Get current directory and Python executable
 $currentDir = Get-Location
 $pythonExe = "python"
-$scriptPath = "E:\Repoi\UpworkNotif\ai\standalone_phase_detector.py"
+$scriptPath = "E:\Repoi\UpworkNotif\scripts\standalone_phase_detector.py"
 
 Write-Host "============================================" -ForegroundColor Cyan
 Write-Host "STANDALONE PHASE DETECTOR" -ForegroundColor Cyan  

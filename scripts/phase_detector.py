@@ -62,7 +62,8 @@ class PhaseDetector:
         # Use default path if none provided
         if model_dir is None:
             model_dir = os.path.join(
-                os.path.dirname(__file__), 
+                os.path.dirname(os.path.dirname(__file__)), 
+                'ai',
                 'phase_detector_trainer', 
                 'trained_models', 
                 'phase_classifier_v1'
@@ -167,7 +168,8 @@ def test_detector():
     print("=" * 60)
     
     model_dir = os.path.join(
-        os.path.dirname(__file__), 
+        os.path.dirname(os.path.dirname(__file__)), 
+        'ai',
         'phase_detector_trainer', 
         'trained_models', 
         'phase_classifier_v1'

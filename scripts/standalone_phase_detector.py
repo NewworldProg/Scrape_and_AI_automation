@@ -14,7 +14,7 @@ if sys.platform == "win32":
 # Add parent directory to path
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from data.chat_database_manager import ChatDatabase
-from ai.phase_detector import PhaseDetector
+from scripts.phase_detector import PhaseDetector
 
 class StandalonePhaseDetector:
 
