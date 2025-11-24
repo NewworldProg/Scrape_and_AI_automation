@@ -7,10 +7,12 @@ param(
     [string]$Output = "json"
 )
 
-# Get current directory and Python executable
+# Get current directory and Python executable from venv
 $currentDir = Get-Location
-$pythonExe = "python"
-$scriptPath = "E:\Repoi\UpworkNotif\scripts\standalone_phase_detector.py"
+$projectRoot = Split-Path $PSScriptRoot -Parent
+$venvPython = Join-Path $projectRoot "venv\Scripts\python.exe"
+$pythonExe = if (Test-Path $venvPython) { $venvPython } else { "python" }
+$scriptPath = Join-Path $projectRoot "scripts\standalone_phase_detector.py"
 
 Write-Host "============================================" -ForegroundColor Cyan
 Write-Host "STANDALONE PHASE DETECTOR" -ForegroundColor Cyan  

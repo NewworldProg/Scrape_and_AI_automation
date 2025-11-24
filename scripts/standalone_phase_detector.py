@@ -39,20 +39,16 @@ class StandalonePhaseDetector:
         print("\n" + "="*60)
         print("STANDALONE PHASE DETECTOR")
         print("="*60)
-        # error if model not found
-        # check if path to model exists
-        if not os.path.exists(model_dir):
-            print(f"❌ ERROR: BERT model not found at {model_dir}")
-            print(f"   Run: python ai/train_phase_classifier.py")
-            print("="*60 + "\n")
-            raise FileNotFoundError("BERT model not trained")
-        
+        # Try to load trained model, fallback to base BERT if not found
         try:
-            # call PhaseDetector class and load model
+            # call PhaseDetector class and load model (with built-in fallback)
             self.phase_detector = PhaseDetector(model_dir)
-            print("✅ BERT PHASE DETECTOR LOADED")
-            # print model metadata
-            print(f"   Accuracy: {self.phase_detector.metadata.get('accuracy')}%")
+            if hasattr(self.phase_detector, 'metadata') and self.phase_detector.metadata:
+                print("✅ TRAINED BERT PHASE DETECTOR LOADED")
+                print(f"   Accuracy: {self.phase_detector.metadata.get('accuracy')}%")
+            else:
+                print("✅ BASE BERT PHASE DETECTOR LOADED (FALLBACK)")
+                print("   Note: Using untrained model - lower accuracy expected")
             print("="*60 + "\n")
             # except on error
         except Exception as e:

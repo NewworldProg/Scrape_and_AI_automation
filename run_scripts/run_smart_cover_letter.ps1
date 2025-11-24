@@ -16,9 +16,9 @@ try {
     Set-Location $projectRoot
     
     # Activate virtual environment if it exists
-    if (Test-Path ".\.venv\Scripts\Activate.ps1") {
+    if (Test-Path ".\venv\Scripts\Activate.ps1") {
         Write-Host "🔄 Activating virtual environment..." -ForegroundColor Yellow
-        & ".\.venv\Scripts\Activate.ps1"
+        & ".\venv\Scripts\Activate.ps1"
     }
     
     # Run the smart cover letter generator from current directory

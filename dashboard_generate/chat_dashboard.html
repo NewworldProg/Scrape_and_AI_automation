@@ -331,12 +331,12 @@
             </div>
             
             <div class="stat-card" style="background: linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%);">
-                <span class="stat-number">98</span>
+                <span class="stat-number">104</span>
                 <div class="stat-label">Total Messages</div>
             </div>
             
             <div class="stat-card" style="background: linear-gradient(135deg, #FF5722 0%, #D84315 100%);">
-                <span class="stat-number">0</span>
+                <span class="stat-number">6</span>
                 <div class="stat-label">Recent Messages (1h)</div>
             </div>
         </div>
@@ -348,7 +348,7 @@
                     <h2>Unknown Chat Session</h2>
                     <div class="chat-info">
                         Unknown • Unknown • 
-                        10 messages
+                        16 messages
                     </div>
                 </div>
                 
@@ -414,6 +414,42 @@
                         
                     </div>
             
+                    <div class="message unknown">
+                        <div class="message-sender">unknown</div>
+                        <div class="message-text">Претражите или започните ново ћаскање</div>
+                        <div class="timestamp">07:47</div>
+                    </div>
+            
+                    <div class="message outgoing">
+                        <div class="message-sender">unknown</div>
+                        <div class="message-text">tail-outClient:Hi Luka, I’m looking for someone to automate a small workflow for my ecommerce shop. I saw you worked with Python and scraping — are you available this week?Freelancer:Hi! Yes, I’m available. Can you describe what the workflow should do so I can estimate the time and tools needed?Client:Sure. Basically, I need a script that logs into my supplier’s dashboard, downloads the updated product list every morning, and pushes the new prices to my Shopify store.Freelancer:Understood. Does the supplier dashboard require 2FA or is it just regular username/password login?Client:Just username and password. But the site uses some JavaScript rendering, so regular requests might not work.Freelancer:No issue — for JS-heavy sites we can use Playwr…Прочитајте више17:4917:49msg-check</div>
+                        
+                    </div>
+            
+                    <div class="message outgoing">
+                        <div class="message-sender">unknown</div>
+                        <div class="message-text">tail-out# PowerShell Script: Standalone Phase Detector# Detects conversation phase using BERT and updates database# No response generation - only phase detectionparam([string]$SessionId = "latest",[string]$Output = "json")# Get current directory and Python executable from venv$currentDir = Get-Location$projectRoot = Split-Path $PSScriptRoot -Parent$venvPython = Join-Path $projectRoot "venv\Scripts\python.exe"$pythonExe = if (Test-Path $venvPython) { $venvPython } else { "python" }$scriptPath = Join-Path $projectRoot "scripts\standalone_phase_detector.py"Write-Host "============================================" -ForegroundColor CyanWrite-Host "STANDALONE PHASE DETECTOR" -ForegroundColor CyanWrite-Host "============================================" -ForegroundColor CyanWrite-Host "Session ID: $SessionId" -ForegroundColor YellowWrite-Host "Output Format: $Output" -ForegroundColor YellowWrite-Host "Script Path: $scriptPath" -ForegroundColor YellowWrite-Host ""# Build command with full path$command = "$pythonExe"$scriptPath" --session"$SessionId" --output"$Output""Write-Host "Command: $command" -ForegroundColor GreenWrite-Host ""# Execute phase detectiontry {Write-Host "[PHASE DETECT] Starting BERT analysis..." -ForegroundColor Blue# Run the standalone phase detector$result = Invoke-Expression $commandif ($LASTEXITCODE -eq 0) {Write-Host "[SUCCESS] Phase detection completed!" -ForegroundColor GreenWrite-Host ""Write-Host $result}else {Write-Host "[ERROR] Phase detection failed!" -ForegroundColor RedWrite-Host $resultexit 1}}catch {Write-Host "[EXCEPTION] Error running phase detector: $($_.Exception.Message)" -ForegroundColor Redexit 1}Write-Host ""Write-Host "============================================" -ForegroundColor CyanWrite-Host "PHASE DETECTION COMPLETE" -ForegroundColor CyanWrite-Host "============================================" -ForegroundColor Cyan08:2108:21msg-check</div>
+                        
+                    </div>
+            
+                    <div class="message outgoing">
+                        <div class="message-sender">unknown</div>
+                        <div class="message-text">document-PS1-iconPS1run_detect_phase_standalone.ps1PS1•2 kB•08:23msg-checkforward-refreshed</div>
+                        
+                    </div>
+            
+                    <div class="message outgoing">
+                        <div class="message-sender">unknown</div>
+                        <div class="message-text">document-PS1-iconPS1run_smart_cover_letter.ps1PS1•1 kB•08:25msg-checkforward-refreshed</div>
+                        
+                    </div>
+            
+                    <div class="message outgoing">
+                        <div class="message-sender">unknown</div>
+                        <div class="message-text">document-PY-iconPYstandalone_phase_detector.pyPY•7 kB•08:26msg-checkforward-refreshed</div>
+                        
+                    </div>
+            
                 </div>
             </div>
         
@@ -423,18 +459,18 @@
         
                     <div class="ai-suggestion-card">
                         <div class="suggestion-info">
-                            <span class="phase-badge">Phase: structure_clarification</span>
-                            <span class="confidence-badge">77.6%</span>
+                            <span class="phase-badge">Phase: initial_response</span>
+                            <span class="confidence-badge">64.7%</span>
                         </div>
                 
-                        <div class="response-option template-response" onclick="copyResponse('Perfect! I understand the structure requirements. I\'ll follow that format exactly.')">
+                        <div class="response-option template-response" onclick="copyResponse('Thank you for reaching out! I\'m very interested. Could you tell me more about the project?')">
                             <strong>📝 Template Response</strong>
-                            <p>Perfect! I understand the structure requirements. I'll follow that format exactly.</p>
+                            <p>Thank you for reaching out! I'm very interested. Could you tell me more about the project?</p>
                         </div>
                     
-                        <div class="response-option ai-response" onclick="copyResponse('Our goal is to provide the best possible experience for our clients. Our approach is simple: Keep the content short, concise and clear. We will work w')">
+                        <div class="response-option ai-response" onclick="copyResponse('Please write the following information: языкок домущия родикий ублат проссии таксегу в калога грудене.')">
                             <strong>🤖 AI Generated Response</strong>
-                            <p>Our goal is to provide the best possible experience for our clients. Our approach is simple: Keep the content short, concise and clear. We will work w</p>
+                            <p>Please write the following information: языкок домущия родикий ублат проссии таксегу в калога грудене.</p>
                         </div>
                     
                     </div>
