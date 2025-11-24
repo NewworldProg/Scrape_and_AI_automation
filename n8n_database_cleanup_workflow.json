@@ -1,4 +1,4 @@
-{
+﻿{
     "name": "Simple Database Cleanup",
     "nodes": [
         {
@@ -34,7 +34,7 @@
         },
         {
             "parameters": {
-                "command": "python \"E:\\Repoi\\UpworkNotif\\\\scripts\\\\simple_n8n_cleanup.py\"",
+                "command": "python \"\\\\scripts\\\\simple_n8n_cleanup.py\"",
                 "options": {}
             },
             "id": "2d5f6b0e-e6e6-6f9f-bd5d-2f9f0f1e4d3d",
@@ -90,3 +90,4 @@
     "updatedAt": "2025-11-10T14:40:00.000Z",
     "versionId": "2"
 }
+

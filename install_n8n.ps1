@@ -58,6 +58,41 @@ catch {
     exit 1
 }
 
+# Check for Chrome installation
+Write-Host "`n🌐 Checking browser requirements..." -ForegroundColor Cyan
+
+$chromePaths = @(
+    "C:\Program Files\Google\Chrome\Application\chrome.exe",
+    "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe", 
+    "$env:LOCALAPPDATA\Google\Chrome\Application\chrome.exe"
+)
+
+$chromeFound = $false
+foreach ($path in $chromePaths) {
+    if (Test-Path $path) {
+        Write-Host "   ✅ Chrome found: $path" -ForegroundColor Green
+        $chromeFound = $true
+        break
+    }
+}
+
+if (-not $chromeFound) {
+    Write-Host "   ❌ Chrome not found!" -ForegroundColor Red
+    Write-Host "   📦 Chrome is REQUIRED for web scraping functionality" -ForegroundColor Yellow
+    Write-Host "   🔗 Download Chrome: https://www.google.com/chrome/" -ForegroundColor Yellow
+    Write-Host ""
+    
+    $continue = Read-Host "Continue installation without Chrome? Web scraping will NOT work. (y/N)"
+    if ($continue -ne 'y' -and $continue -ne 'Y') {
+        Write-Host "❌ Installation cancelled. Please install Chrome first." -ForegroundColor Red
+        exit 1
+    }
+    Write-Host "   ⚠️ Continuing without Chrome - web scraping disabled" -ForegroundColor Yellow
+}
+else {
+    Write-Host "   🎯 Chrome verification passed" -ForegroundColor Green
+}
+
 # Install N8N globally if not present
 try {
     $n8nVersion = n8n --version
@@ -222,102 +257,63 @@ n8n start
         Write-Host "   Helper scripts created" -ForegroundColor Green
     }
 
-    # Replace absolute paths in N8N workflow files
-    if (-not $DryRun) {
-        Write-Host "   Updating workflow paths..." -ForegroundColor Yellow
-        
-        $workflowFiles = @(
-            "n8n_workflow_conditional.json",
-            "n8n_ai_cover_letter_workflow.json", 
-            "n8n_chat_ai_workflow.json",
-            "n8n_database_cleanup_workflow.json"
-        )
 
-        foreach ($file in $workflowFiles) {
-            if (Test-Path $file) {
-                $content = Get-Content $file -Raw -Encoding UTF8
-                # Replace various path formats and placeholders
-                $normalizedPath = $newBasePath.Replace('\', '\\')
-                $content = $content -replace "E:\\\\\\\\Repoi\\\\\\\\UpworkNotif", $normalizedPath
-                $content = $content -replace "E:\\\\Repoi\\\\UpworkNotif", $normalizedPath
-                $content = $content -replace "E:/Repoi/UpworkNotif", $newBasePath.Replace('\', '/')
-                $content = $content -replace "\{\{PROJECT_ROOT\}\}", $normalizedPath
-                Set-Content $file -Value $content -Encoding UTF8
-                Write-Host "     Updated: $file" -ForegroundColor Gray
+}
+
+# STEP 3: N8N WORKFLOWS generation using template system
+Write-Host "`n STEP 3: N8N Workflow Generation..." -ForegroundColor Magenta
+
+if (-not $DryRun) {
+    Write-Host "   Generating N8N workflows with correct paths..." -ForegroundColor Yellow
+    
+    # Use the new comprehensive workflow generator system
+    $allWorkflowsScript = Join-Path $newBasePath "generate_all_workflows.ps1"
+    if (Test-Path $allWorkflowsScript) {
+        # Run the master workflow generator
+        & $allWorkflowsScript -ProjectRoot $newBasePath -OutputDir "n8n"
+        Write-Host "   ✅ All N8N workflows generated successfully!" -ForegroundColor Green
+    }
+    else {
+        Write-Host "   ⚠️ Master generator not found - trying individual generators..." -ForegroundColor Yellow
+        
+        # Fallback: try individual generators
+        $generators = @(
+            "generate_conditional_workflow.ps1",
+            "generate_chat_ai_workflow.ps1", 
+            "generate_cover_letter_workflow.ps1",
+            "generate_database_cleanup_workflow.ps1"
+        )
+        
+        $generatedCount = 0
+        foreach ($generator in $generators) {
+            $generatorPath = Join-Path $newBasePath $generator
+            if (Test-Path $generatorPath) {
+                try {
+                    & $generatorPath -ProjectRoot $newBasePath -OutputDir "n8n"
+                    $generatedCount++
+                    Write-Host "     ✅ Generated workflow from $generator" -ForegroundColor Gray
+                }
+                catch {
+                    Write-Host "     ❌ Failed to generate from $generator" -ForegroundColor Red
+                }
             }
         }
         
-        Write-Host "   Workflow paths updated to: $newBasePath" -ForegroundColor Green
-    }
-}
-
-# STEP 3: N8N WORKFLOWS creation
-# check for workflow json files in current directory
-# count how many are found and log found/missing
-Write-Host "`n STEP 3: N8N Workflow Setup..." -ForegroundColor Magenta
-
-$workflowFiles = @(
-    "n8n_job_scraper_workflow.json",
-    "n8n_ai_cover_letter_workflow.json", 
-    "n8n_chat_ai_workflow.json",
-    "n8n_database_cleanup_workflow.json",
-    "n8n_workflow_conditional.json"
-)
-
-$foundWorkflows = 0
-$workflowsFound = @()
-foreach ($workflow in $workflowFiles) {
-    if (Test-Path $workflow) {
-        Write-Host "   Found: $workflow" -ForegroundColor Green
-        $foundWorkflows++
-        $workflowsFound += $workflow
-    }
-    else {
-        Write-Host "    Missing: $workflow" -ForegroundColor Yellow
-    }
-}
-# if any workflows found process them
-if ($foundWorkflows -gt 0) {
-    Write-Host "   $foundWorkflows workflow(s) found - processing paths..." -ForegroundColor Green
-    
-    # Create n8n directory and process workflows
-    $n8nDir = Join-Path $newBasePath "n8n"
-    if (-not $DryRun) {
-        if (-not (Test-Path $n8nDir)) {
-            New-Item -ItemType Directory -Path $n8nDir -Force | Out-Null
-            Write-Host "   Created n8n/ directory" -ForegroundColor Green
+        if ($generatedCount -gt 0) {
+            Write-Host "   ✅ Generated $generatedCount workflow(s) using individual generators" -ForegroundColor Green
         }
-        
-        # Process each workflow file  
-        foreach ($workflow in $workflowsFound) {
-            $destinationPath = Join-Path $n8nDir $workflow
-            $originalContent = Get-Content $workflow -Raw -Encoding UTF8
-            
-            # copy original content to content variable for safe manipulation
-            # Replace hardcoded paths - safe string replacement
-            $content = $originalContent
-            $oldPathWindows = "E:\\Repoi\\UpworkNotif"
-            $oldPathUnix = "E:/Repoi/UpworkNotif" 
-            $newPathJson = $newBasePath -replace '\\', '\\'
-            
-            # JSON-safe path replacement
-            $content = $content.Replace($oldPathWindows, $newPathJson)
-            $content = $content.Replace($oldPathUnix, $newPathJson)
-            $content = $content.Replace("E:\Repoi\UpworkNotif", $newPathJson)
-            
-            # Save updated workflow in n8n/ directory and log
-            Set-Content -Path $destinationPath -Value $content -Encoding UTF8
-            Write-Host "     Processed: $workflow -> n8n/" -ForegroundColor Green
+        else {
+            Write-Host "   ⚠️ No workflow generators found - creating basic n8n directory" -ForegroundColor Yellow
+            $n8nDir = Join-Path $newBasePath "n8n"
+            if (-not (Test-Path $n8nDir)) {
+                New-Item -ItemType Directory -Path $n8nDir -Force | Out-Null
+                Write-Host "   Created n8n/ directory" -ForegroundColor Green
+            }
         }
-        
-        Write-Host "   All workflows updated with correct paths!" -ForegroundColor Cyan
-    }
-    else {
-        Write-Host "   [DRY RUN] Would create n8n/ directory and process $foundWorkflows workflows" -ForegroundColor Cyan
     }
 }
 else {
-    Write-Host "    No workflow files found in current directory" -ForegroundColor Yellow
+    Write-Host "   [DRY RUN] Would generate N8N workflows using template system" -ForegroundColor Cyan
 }
 
 # STEP 4: ENVIRONMENT CONFIGURATION
